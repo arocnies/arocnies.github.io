@@ -2,6 +2,48 @@
   Style for Homepage
 */
 
+.post-thumbnail {
+  position: relative;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 20%;
+  min-width: 15%;
+}
+
+.post-data {
+  display: flex;
+  flex-direction: column;
+}
+
+.circle-border {
+  position: relative;
+  background: #242424;
+  clip-path: circle();
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* Center vertically and horizontally */
+  height: 100%;
+  padding-top: 100%;
+
+  img {
+    object-fit: cover;
+    height: 96%;
+    top: 2%;
+  }
+  img:hover {
+    filter: blur(1);
+  }
+}
+
+.circle-inside {
+  position: absolute;
+  text-align: center;
+  clip-path: circle();
+}
+
 .pagination {
   color: var(--btn-patinator-text-color);
   font-family: 'Lato', sans-serif;
@@ -86,6 +128,7 @@
     }
 
     .post-content {
+      flex-grow: 1;
       margin-top: 0.6rem;
       margin-bottom: 0.6rem;
       color: var(--post-list-text-color);
