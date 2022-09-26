@@ -26,7 +26,7 @@ The command to forward a port using the `-L` option is
 ssh -L <clocal>local_port</clocal>:<cdest>dest_ip</cdest>:<cdest>dest_port</cdest> <cproxy>proxy_user@proxy_ip</cproxy>
 </pre>
 
-![Test image](/assets/posts/ssh-tunnels/ssh-tunnel-1.png)
+![ssh-tunnel-1](/assets/posts/ssh-tunnels/ssh-tunnel-1.png)
 
 Nothing too special. The main thing to note here is the potentially confusing argument order. It would feel natural to have an order of “source → proxy → destination”. However, the arguments are typed as “source → destination → proxy”.
 
@@ -44,7 +44,7 @@ ssh -L <clocal>local_port</clocal>:<cdest><b>127.0.0.1</b></cdest>:<cdest>dest_p
 
 The destination is **relative to the proxy machine**. This makes sense considering that in most use-cases the host machine cannot reach the final destination except through the proxy. When the destination is localhost, the destination is the proxy machine.
 
-![Test image](/assets/posts/ssh-tunnels/ssh-tunnel-2.png)
+![ssh-tunnel-2](/assets/posts/ssh-tunnels/ssh-tunnel-2.png)
 
 Tunnels chained together with `localhost` are easy conceptualize and allow fallback into a shell on all of the intermediate proxy machines. The only variable part of the SSH command between each shell is next destination.
 
@@ -52,7 +52,7 @@ It's easier to build a linked list adding one element to the tail at a time, rat
 
 In cases where we do not want to fallback into shells on any of these machines, there are easier methods to create a tunnel spanning multiple hosts.
 
-![Test image](/assets/posts/ssh-tunnels/ssh-tunnel-3.png)
+![ssh-tunnel-3](/assets/posts/ssh-tunnels/ssh-tunnel-3.png)
 
 # Jump Host
 The option to jump through a host before reaching the final destination is `-J`. While easy to write, the downside to this approach is jumps requiring varying credentials or other SSH options in the chain spoil the ease its use.
