@@ -1,6 +1,6 @@
 ---
 title: SSH Essentials
-date: 2022-09-23 17:23:10 -0400
+date: 2022-04-13 12:23:10 -0400
 categories: [Linux]
 tags: [ssh, linux, configuration, devops, proxy, bastion]
 author: anies
