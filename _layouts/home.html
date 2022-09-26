@@ -45,7 +45,7 @@ layout: page
 {% for post in posts %}
 
     <div class="post-preview" style="display: flex">
-      <div class="post-thumbnail" style="margin-right: 10px">
+      <div class="post-thumbnail" style="margin-right: 5%">
         <div style="text-align: center">
           <a class="circle-border" href="{{ post.url | relative_url }}">
             <img class="circle-inside" src="{{ post.thumbnail }}" width="200" align="center"/>
@@ -53,7 +53,7 @@ layout: page
         </div>
       </div>
 
-      <div class="post-data">
+      <div class="post-data shad">
         <h1>
           <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
         </h1>

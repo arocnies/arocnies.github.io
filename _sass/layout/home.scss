@@ -2,23 +2,9 @@
   Style for Homepage
 */
 
-.post-thumbnail {
-  position: relative;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 20%;
-  min-width: 15%;
-}
-
-.post-data {
-  display: flex;
-  flex-direction: column;
-}
-
 .circle-border {
   position: relative;
-  background: #242424;
+  background: #ffffff;
   clip-path: circle();
   display: flex;
   justify-content: center;
@@ -30,11 +16,8 @@
 
   img {
     object-fit: cover;
-    height: 96%;
-    top: 2%;
-  }
-  img:hover {
-    filter: blur(1);
+    height: 88%;
+    top: 6%;
   }
 }
 
@@ -154,6 +137,21 @@
       > span {
         display: none;
       }
+    }
+
+    .post-thumbnail {
+      position: relative;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 20%;
+      min-width: 15%;
+      filter: drop-shadow(0px 5px 10px rgba(0, 0, 0, 0.3));
+    }
+
+    .post-data {
+      display: flex;
+      flex-direction: column;
     }
 
   } // .post-preview
