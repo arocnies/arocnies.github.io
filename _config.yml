@@ -23,7 +23,7 @@ timezone: America/New_York
 
 title: Hello, I'm Aaron                      # the main title
 
-tagline: Software Engineer who enjoys working with the most difficult machines ever created... humans! Software is cool too. # it will display as the sub-title
+tagline: A Software Engineer who enjoys working with the most difficult machines ever created... humans! Software is cool too. # it will display as the sub-title
 
 description: >-                        # used by seo meta and the atom feed
   Hello, I'm Aaron. Software Engineer who enjoys working with the most difficult machines ever created... humans! Software is cool too.

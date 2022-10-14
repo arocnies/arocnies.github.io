@@ -1,6 +1,10 @@
 ---
-layout: post
 title: Easy Playground for Terraform + Ansible
+date: 2022-10-13 1:48:10 -0400
+categories: [DevOps]
+tags: [terraform, docker, ansible, devops, config-as-code, cloud, learning]
+author: anies
+thumbnail: /assets/posts/easy-playground-for-terraform-docker-ansible/tf_ansible_playground.png
 ---
 While an initial introduction to containers and devops tools is simple, developers need practice integrating the tools in a way that allows them to experiment on their local machine.
 
@@ -53,12 +57,12 @@ Tags on VMs can be used as Ansible groups when using a dynamic inventory. Which 
 > You can even use a [dynamic inventory based on Terraform state](https://github.com/adammck/terraform-inventory) (spectacular stuff! 🎉)
 {: .prompt-tip }
 
-## Terraform Output
-For our playground, the Ansible inventory will be an output of the applied Terraform. This is so we can flex some Terraform muscles while still keeping a clean interface.
+## Generated Local_file vs. Output
+For our playground, the Ansible inventory will be a Terraform output. This is so we can flex Terraform muscles while still keeping a clean interface with Ansible.
 
-Notice that the inventory could be a "local_file" **resource** or an **output**. Terraform doesn't know how inventory will be used; local_file resources complicates things when dealing with the cloud and CI/CD platforms where the inventory file may not be used.
+Notice that the inventory could be a "local_file" **resource** or an **output**. Terraform doesn't know how inventory will be used; local_file resources complicates things when dealing with the cloud and CI/CD platforms where the inventory file may not be needed.
 
-Saving the output content to file as needed allows for fewer assumptions on when and how the inventory is retrieved.
+Moving the step of saving the output content to file away from Terraform means fewer assumptions on when and how the inventory is retrieved.
 
 > For a local playground either option is fine. This post will use _output_. When using an output, save the inventory to a file using `terraform output -raw <name of output>`
 {: .prompt-info }
@@ -161,7 +165,7 @@ We'll start with a minimal Ansible playbook.
       ansible.builtin.command: echo Hello World!
 ```
 
-> Docker containers do not function easily with systemd. Be aware that roles, such as an off-the-shelf Apache HTTP server may fail to run inside a container.
+> Docker containers do not function easily with systemd. Be aware that roles, such as this [Apache server role](https://github.com/geerlingguy/ansible-role-apache) may fail to run targeting a Docker container.
 {: .prompt-warning }
 
 # Using the Playground
@@ -178,7 +182,7 @@ terraform -chdir=infra init
 terraform -chdir=infra apply
 
 # Save the inventory file
-terraform -chdir=infra output -raw ansible_inventory > inventory.yml
+terraform -chdir=infra output -raw ansible_inventory > inventory
 
 # Ping the machines with Ansible
 ansible all -i inventory -m ping
