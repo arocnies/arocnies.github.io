@@ -10,8 +10,6 @@ Examples and _Hello World_ projects for single tools are accessible and easy to 
 
 ![Terraform_Docker_Ansible](/assets/posts/easy-playground-for-terraform-docker-ansible/tf_ansible_playground.png){: width="972" height="589" .w-50}
 
-Let's look at an integration playground that includes Terraform, Docker, and Ansible. Where Terraform creates containers which will be provisioned by Ansible. All running on a developer's local machine.
-
 The goal is a learning project with a focus on Terraform+Ansible integration. Docker is ubiquitous enough to earn a spot as our stand-in cloud.
 
 Organization of the playground is focused on a runnable starting point rather than a demonstration of how large use-cases should organize their code and files. We'll make note of those best-practices when we get to forks in the road.
@@ -62,10 +60,10 @@ Notice that the inventory could be a "local_file" **resource** or an **output**.
 
 Saving the output content to file as needed allows for fewer assumptions on when and how the inventory is retrieved.
 
-> For a local playground either option is fine. This post will use _local_file_. When using an output, save the inventory to a file using `terraform output -raw <name of output>`
+> For a local playground either option is fine. This post will use _output_. When using an output, save the inventory to a file using `terraform output -raw <name of output>`
 {: .prompt-info }
 
-> Remember, **[composition over inheritance](https://www.terraform.io/language/modules/develop/composition)**! If you find yourself in a situation where submodules are generating inventories, then you're probably creating an unfortunate dependency.
+> Remember, **[composition](https://www.terraform.io/language/modules/develop/composition)**! If you find yourself in a situation where submodules are generating inventories, then there's a good chance you're creating an unfortunate dependency.
 > Your inventory should only be known to your top module.
 {: .prompt-warning }
 
@@ -94,7 +92,7 @@ resource "local_file" "ansbile_inventory" {
 ### Static INI Inventory
 
 The equivalent INI based Ansible inventory is
-```hosts.ini
+```
 container1
 
 [all:vars]
@@ -103,14 +101,15 @@ ansible_connection=docker
 
 A manually created INI file is a good alternative. Both cases have the follow-up steps of implementing looping over the hosts. The static INI inventory becomes a template while the _yamlencode_ inventory is built with HCL functions.
 
-> Starting with YAML encoded inventory will lead to learning on HCL language skills when in using the playground.
+> A YAML encoded inventory will lead to learning on HCL language skills when in using the playground.
 >
-> Use a manual INI file to explore more advanced Ansible inventory uses.
+> Use a static file to explore more advanced Ansible inventory uses independently from HCL.
+{: .prompt-tip }
 
 For example, using the _yamlencode_ approach one can loop over AWS EC2s and build an inventory with `zipmap()`
 ```hcl
-resource "local_file" "ansbile_inventory" {
-  content = yamlencode({
+output "ansible_inventory" {
+  value = yamlencode({
     all : {
       hosts : zipmap(aws_instance.workers[*].tags.Name, [
         for ip in aws_instance.workers[*].private_ip : {
@@ -124,15 +123,81 @@ resource "local_file" "ansbile_inventory" {
 
 # Integration
 
-Terraform and Ansible serve complementary responsibilities. Terraform creates infrastructure resources and Ansible provisions resources.
+Terraform and Ansible serve **complementary responsibilities**. Terraform creates infrastructure resources and Ansible provisions resources.
 
-Since Terraform is capable of executing commands on remote hosts, the line between these responsibilities should be kept clear. A useful guide is "Terraform stops once the resources are accessible".
+Since Terraform is capable of executing commands on remote hosts, the line between these responsibilities should be kept clear. A useful guide for drawing the line is:
+> Terraform stops once the resources are accessible.
+{: .prompt-tip }
 
 Setting up SSH and installing configuration-management agents (i.e. Chef or Salt) are Terraform responsibilities. Updating packages and configuring additional user accounts are Ansible responsibilities.
 
-##
+## Mono-repo vs. Multiple projects
 
----
-- Other ways of doing it
-  - Ansible Terraform Module https://docs.ansible.com/ansible/latest/collections/community/general/terraform_module.html
-  - etc
+Since the playground files are small and portable, we'll keep the files in the same project. This mono-repo approach provides flexibility to experiment.
+The downside to this flexibility is that it blurs the lines of responsibility.
+
+Using separate projects enforces boundaries. READMEs in each project make the interfaces clear to new collaborators. And if desired, a _directional_, _versioned_ dependency can be added with [Git Submodules](https://www.git-scm.com/book/en/v2/Git-Tools-Submodules).
+
+For the playground, we'll use a mono-repo. The project will be organized as standard Ansible project with an additional `infra` directory for the Terraform stack.
+
+```
+playground
+    ├── .gitignore
+    ├── README.md
+    ├── site.yml          <-- Ansible playbook
+    ├── inventory.yml     <-- Inventory (not tracked in VCS)
+    └── infra             <-- Terraform root
+        └── main.tf
+```
+
+# Ansible Playbook
+
+We'll start with a minimal Ansible playbook.
+```yaml
+- name: My Ansible Playbook
+  hosts: all
+  tasks:
+    - name: Hello World
+      ansible.builtin.command: echo Hello World!
+```
+
+> Docker containers do not function easily with systemd. Be aware that roles, such as an off-the-shelf Apache HTTP server may fail to run inside a container.
+{: .prompt-warning }
+
+# Using the Playground
+
+![Terraform_Docker_Ansible](/assets/posts/easy-playground-for-terraform-docker-ansible/tf_ansible_graph.png){: width="972" height="589" .w-50}
+
+The working directory for all commands is the project root.
+
+```shell
+# Initialize
+terraform -chdir=infra init
+
+# Apply the stack
+terraform -chdir=infra apply
+
+# Save the inventory file
+terraform -chdir=infra output -raw ansible_inventory > inventory.yml
+
+# Ping the machines with Ansible
+ansible all -i inventory -m ping
+
+# Run the playbook
+ansible-playbook -i inventory site.yml
+```
+
+You can view the code [here](https://github.com/arocnies/ansible-terraform-playground).
+
+# Next Steps
+
+The playground is a good starting point. Here's a few things to try next:
+
+- Create multiple containers and build the inventory dynamically
+- Switch the inventory to use SSH instead of a Docker connection
+- Expand the Terraform module with _output.tf_, _terraform.tfvars_, etc
+- Apply the Terraform stack from the Playbook with the [Ansible Terraform Module](https://docs.ansible.com/ansible/latest/collections/community/general/terraform_module.html)
+- Add VirtualBox VMs to the stack using the [Terraform Virtualbox Provider](https://registry.terraform.io/providers/terra-farm/virtualbox/latest/docs)
+- Create groups for hosts in the inventory
+- Add Ansible role dependencies via Ansible Galaxy and `requirements.yml`
+- Use the [dynamic inventory based on Terraform state](https://github.com/adammck/terraform-inventory) instead of a Terraform generated inventory
