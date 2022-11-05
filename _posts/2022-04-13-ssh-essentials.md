@@ -12,6 +12,9 @@ cdest { color: #f8359b }
 cproxy { color: #d436d6 }
 cviolet { color: #bc7cfa }
 clocal { color: #5c53fa }
+img {
+  border-radius: 10px;
+}
 </style>
 
 Accessing hosts in a dynamic environment, on-the-fly SSH exploring, without the help of Google or StackOverflow can be challenging. Especially when there are multiple bastions, varying credentials, or the need to forward ports. It's good to take stock of a few SSH basics to avoid getting slowed down in the ever-present `--help` text and `man` pages.
