@@ -27,8 +27,8 @@ Number phrasing isn't too complex. Groups of three (triples) with special cases 
 Here's my solution, about **~20 lines** of meat excluding the word lists.
 
 <script src="https://unpkg.com/kotlin-playground@1" data-selector="kcode"></script>
-
 <kcode from="1" to="22" theme="darcula" lines="true" match-brackets="true">
+<pre>
 fun numberToWord(number: String): String = if (number == "0") "zero" else number
     .chunkedRightToLeft(3)
     .map { tripleDigitsToWord(it.toString()) }
@@ -157,6 +157,6 @@ val thousands = listOf(
 "octotrigintillion",
 "novemtrigintillion"
 )
+</pre>
 </kcode>
-
 
