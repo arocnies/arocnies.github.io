@@ -18,10 +18,8 @@ $(document).ready(function() {
   const $close = $(".close-button");
   $close.click(function() {
     if ($fullscreen[0].classList.contains('fullscreen-on')) {
-      $('body').css({'overflow':'hidden'});
-      $(document).bind('scroll',function () {
-        window.scrollTo(0,0);
-      });
+      $(document).unbind('scroll');
+      $('body').css({'overflow':'visible'});
       $fullscreen.toggleClass("fullscreen-on");
     }
     showPreview("game")
