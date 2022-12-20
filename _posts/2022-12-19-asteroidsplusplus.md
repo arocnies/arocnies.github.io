@@ -22,13 +22,13 @@ thumbnail: /assets/posts/asteroidsplusplus/asteroids-preview.png
   </div>
 </div>
 
-# This is a ghost! 👻
+# This code is undead! 🧟
 
-This is not the software I originally created. The guts were ripped out and sown back too together.
-It's a software zombie, a creature reshaped with an updated framework, an undead game.
-
+This is not the software I originally created.
 This is software that died when **a major artifact provider shut down and left town**.
-What you see here is the shadow of my original **Asteroids++** game.
+The guts were ripped out and sown back together.
+It's a software zombie--given new life with an updated framework.
+What you see here is the undead version of my original **Asteroids++** game.
 
 # The code
 
