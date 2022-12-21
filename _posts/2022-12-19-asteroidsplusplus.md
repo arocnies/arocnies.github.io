@@ -76,7 +76,7 @@ I had several options.
 
 When building a project with Gradle, all of your dependencies are cached locally.
 Since I was still using the same laptop, there was a chance I still had my old cached buildscript dependency to use in offline mode.
-Of course, it wasn't that easy. I'd have to find the lost buildscripot dependency elsewhere.
+Of course, it wasn't that easy. I'd have to find the lost buildscript dependency elsewhere.
 
 #### Option #2, switch to another Maven repository such as MavenCentral
 
@@ -109,9 +109,7 @@ I figured the bugs that caused my original browser build to break may be fixed.
 
 The code was a _mess_.
 I like to say, "We code for humans, not for computers", but whoever (...me) coded this jumble did not follow that philosophy as much as I had hoped.
-I take that as a good sign: years later, outside the time constraints, I write cleaner code.
-
-To be fair to my past myself, the code was pretty bad. In the porting process I fixed several obvious bugs.
+I take that as a good sign: years later, outside the time constraints, I write cleaner code. I fixed several bugs but spending more time restructuring the code was not my goal.
 
 Thankfully, the porting itself was simple.
 KorGE's abstractions were precise enough to update sounds, key events, and sprites to the new version without difficulty.
@@ -129,8 +127,3 @@ I added CI/CD hooks (GitHub Actions) to publish the web version.
 
 Someday I may reorganize the code--properly refactor the components and add features.
 For now, I'm impressed this port did not require larger-cost changes or rewrites.
-
-
-
-
-
