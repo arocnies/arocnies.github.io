@@ -70,28 +70,59 @@ The plugin was hosted on JCenter. This was when I first realized there was an is
 The [shutdown of JCenter](https://www.infoq.com/news/2021/02/jfrog-jcenter-bintray-closure/) was significant because it was widely used in JVM projects.
 I've used it in many of my own projects. It was even used for Gradle's examples in their documentation.
 
-I had several options:
+I had several options.
 
-**1) Use a local cache of the plugin and Gradle Offline mode** - No luck. My build cache was cleaned.
+#### Option #1, use a local cache of the plugin and Gradle Offline mode
 
-**2) Switch to MavenCentral instead of JCenter** - Unfortunately, the KorGE plugin used by Asteroids++ was at v1 and not available on MavenCentral.
+When building a project with Gradle, all of your dependencies are cached locally.
+Since I was still using the same laptop, there was a chance I still had my old cached buildscript dependency to use in offline mode.
+Of course, it wasn't that easy. I'd have to find the lost buildscripot dependency elsewhere.
 
-**3) Extract the dependency from my published FatJar** - Not possible. Buildscript dependencies aren't bundled into the final application.
+#### Option #2, switch to another Maven repository such as MavenCentral
 
-**4) Port Asteroids++ from KorGE version 1.13 to KorGE version 3.1** - This could work... Two major KorGE versions shouldn't be too hard.
+The KorGE plugins used to be published on JCenter. New versions are on MavenCentral.
+Unfortunately, the KorGE plugin used by Asteroids++ was at v1 and not available on MavenCentral.
 
+An interesting note that using the same artifact coordinates from a different repository was
+one of the security risks with using JCenter.
+
+#### Option #3, extract the dependency from my published FatJar
+
+I was hoping this would be an option before opening the project up and saw the buildscript dependencies.
+The KorGE library dependencies were baked into the FatJar I published on itch.io.
+But even if I managed to recompile my code using static dependencies,
+I would never be able to run the Gradle tasks associated with KorGE.
+
+The whole point was to avoid any major rewrites, fix obvious bugs and create a web-runnable version of the game.
+None of that was going to work using JVM class files of the final deliverable.
+
+#### Option #4, port Asteroids++ from KorGE version 1.13 to KorGE version 3.1
+
+This was it. The other options were exhausted at this point.
+The hard part of porting this code base is avoiding major refactoring, or worst case, a complete re-write.
+
+KorGE had updated two major version releases. Stuff would break, but
+I figured the bugs that caused my original browser build to break may be fixed.
+
+---
 # Resurrecting the code
 
 The code was a _mess_.
 I like to say, "We code for humans, not for computers", but whoever (...me) coded this jumble did not follow that philosophy as much as I had hoped.
 I take that as a good sign: years later, outside the time constraints, I write cleaner code.
 
-To be fair to myself, even though I would do things differently, it wasn't horrible.
-The abstractions were cut precise enough to update KorGE changes such as sounds, key events, and sprites, without having to restructure the code.
-As ugly as the code felt, making the upgrade was not hard.
+To be fair to my past myself, the code was pretty bad. In the porting process I fixed several obvious bugs.
+
+Thankfully, the porting itself was simple.
+KorGE's abstractions were precise enough to update sounds, key events, and sprites to the new version without difficulty.
+
+I do wish there were more `@ReplaceWith` annotations and documentation.
+Knowing the non-suspending `sound.play()` is replaced with `sound.playNoCancel(PlaybackTimes.ONE)` would have been helpful.
+Even without direct documentation,
+discovering the fix for errors caused by `sound.play()` was only an autocomplete away.
 
 A few new bugs came out of the revived Asteroids++.
-The satisfying sounds of the thrusters are gone.
+The satisfying sounds of the thrusters are broken in the browser (they work in on the JVM).
 The particle effects changed. Nothing game breaking.
 
 I added CI/CD hooks (GitHub Actions) to publish the web version.
