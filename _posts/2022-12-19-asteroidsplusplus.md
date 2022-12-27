@@ -10,15 +10,18 @@ thumbnail: /assets/posts/asteroidsplusplus/asteroids-preview.png
 <link rel="stylesheet" type="text/css" href="/assets/posts/asteroidsplusplus/style.css">
 <script src="/assets/posts/asteroidsplusplus/post.js"></script>
 
-<div class="preview-container" id="game">
-  <div class="content" hidden="hidden">
-    <div class="fullscreen-button"><i class="fa fa-expand fa-2x"></i></div>
-    <div class="close-button"><i class="fa fa-window-close fa-2x"></i></div>
+<!-- FontAwesome v4 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="preview-container" style="width: 100%; height: 300px;">
+  <div class="content" hidden>
+    <div class="preview-fullscreen topright blue-hover"><i class="fa fa-expand fa-2x"></i></div>
+    <div class="preview-close bottomright blue-hover"><i class="fa fa-window-close fa-2x"></i></div>
     <iframe src="https://arocnies.github.io/Asteroids/"></iframe>
   </div>
   <div class="preview">
-    <img src="asteroids-preview.png" alt="Asteroids++">
-    <div class="round-button" onclick="showContent('game')"><i class="fa fa-play fa-2x"></i></div>
+    <img src="asteroids-preview.png" style="width: 100%; height: 300px; object-fit: cover; border-radius: 10px;">
+    <div class="preview-open center blue-hover"><i class="fa fa-play fa-2x"></i></div>
   </div>
 </div>
 
